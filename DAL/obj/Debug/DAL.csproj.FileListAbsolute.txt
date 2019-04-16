@@ -1,0 +1,7 @@
+E:\6th Semester\ead_s18_a8_bsef15m022\Assignment 8\DAL\bin\Debug\DAL.dll
+E:\6th Semester\ead_s18_a8_bsef15m022\Assignment 8\DAL\bin\Debug\DAL.pdb
+E:\6th Semester\ead_s18_a8_bsef15m022\Assignment 8\DAL\bin\Debug\Entities.dll
+E:\6th Semester\ead_s18_a8_bsef15m022\Assignment 8\DAL\bin\Debug\Entities.pdb
+E:\6th Semester\ead_s18_a8_bsef15m022\Assignment 8\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
+E:\6th Semester\ead_s18_a8_bsef15m022\Assignment 8\DAL\obj\Debug\DAL.dll
+E:\6th Semester\ead_s18_a8_bsef15m022\Assignment 8\DAL\obj\Debug\DAL.pdb

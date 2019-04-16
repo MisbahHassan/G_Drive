@@ -1,0 +1,167 @@
+﻿@model List<Entities.FolderDTO>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="@Url.Content("~/Content/LoginStyle.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/PopUp.css")" rel="stylesheet" type="text/css" />
+
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script>
+        function ShowDialog() {
+
+            $('#divoverlay').show();
+            $('#modal_dialog').slideDown(500);
+        }
+        function HideDialog() {
+            $('#divoverlay').hide();
+            $('#modal_dialog').slideUp(500);
+        }
+        function myFunction(id) {
+            var x = document.getElementById("deletebtn");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+        $(document).ready(function () {
+            var basepath = '@Url.Content("~")';
+            //var uname=@Session["UserName"];
+            /*var uname = localStorage.getItem("UserName");
+            $("#h1").html($("#h1").html() + " " + uname);*/
+
+            $("#newFolder").click(function () {
+                ShowDialog();
+                event.preventDefault();
+                return false;
+            });
+            $('#lnkClose').click(function (e) {
+                HideDialog();
+                e.preventDefault();
+            });
+            $('#btnOK').click(function (e) {
+                var fdName = $("#fbtxtName").val();
+                if (fdName == "") {
+                    alert("Fill Name");
+                }
+                else {
+                    HideDialog();
+                    var login = localStorage.getItem("Login");
+                    var val = $("#newFolder").attr("fid");
+                    var obj = new FormData();
+                    obj.append("FolderName", fdName);
+                    obj.append("Login", login);
+                    obj.append("ParentFolderID", val);
+                    var settings = {
+                        type: "POST",
+                        url: basepath + "api/UserData/CreateNewFolder",
+                        contentType: false,
+                        processData: false,
+                        data: obj,
+                        success: function (response) {
+                            location.reload();
+                        },
+                        error: function (response) {
+                            alert("Some Problem Occurred");
+                        }
+                    };
+
+                    $.ajax(settings);
+                }
+            });
+           
+            $(".column").dblclick(function () {
+                var fid = $(this).attr("fid");
+                window.location.href = "/User/DisplayFolder?fid="+ fid;
+            })
+            $(".fddeletebtn").click(function () {
+                var obj = new FormData();
+                var fid = $(this).attr("did");
+                obj.append("FolderID", fid);
+                var n = confirm('Are you sure, you want to Delete it?');
+                if (n == true) {
+                    var settings = {
+                        type: "POST",
+                        url: basepath + "api/UserData/DeleteFolder",
+                        contentType: false,
+                        processData: false,
+                        data: obj,
+                        success: function (response) {
+                            if (response == true) {
+                                location.reload();
+                            }
+                        },
+                        error: function (response) {
+                            alert("Some Problem Occurred");
+                        }
+                    };
+                    $.ajax(settings);
+                }
+            });
+        })
+
+    </script>
+    <style>
+        body {
+            background-color: #4FD8B0;
+        }
+        .resize{
+             max-width: 30%;
+             max-height: 30%;
+        }
+       
+    </style>
+</head>
+<body>
+    <div align="center" id="overlay">
+        <h1 id="h1">Welcome @Session["UserName"]</h1>
+        <input type="submit" class="buttonTemp" id="newFolder" float=left fid="0" value="Create New Folder" /><br />
+        <input class="buttonTemp" type="submit" id="logout" float=right value="Logout" onclick="@("window.location.href='" + @Url.Action("Logout", "User") + "'" );" />
+    </div>
+    <br />
+    <div id="modal_dialog" class="web_dialog">
+        <table style="width: 100%; border: 0px;" cellpadding="3" cellspacing="0">
+            <tr>
+                <td class="dialog_title">
+                    New Folder
+                </td>
+                <td class="dialog_title align_right">
+                    <input type="submit" id="lnkClose" value="Close">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="content">
+                        <label style="color:black; font-size:15px;">Enter Folder Name:</label>
+                        <input id="fbtxtName" type="text" required/>
+                        <br /><br />
+                        <button id="btnOK" value="OK" align="Center">Save</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div align="center" class="row">
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <div fid=@item.ID id="folderDiv" class="column">
+                    <img class="resize" src="/UploadedImages/FolderImage.png" />
+                    <p style="color:white;" fName=@item.Name> @item.Name</p>
+                    <input type="button" class="fddeletebtn" style="border-radius: 12px;color:white;background-color:orangered;padding:10px;" did=@item.ID value="Delete">
+                </div>
+
+            }
+        }
+    </div>
+
+</body>
+</html>
